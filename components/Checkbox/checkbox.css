@@ -1,0 +1,30 @@
+.checkbox-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 3px;
+
+  min-height: 21px;
+  min-width: 21px;
+
+  margin: 0px 5px;
+}
+
+.check {
+  background-color: #2296f3;
+  color: white;
+
+  border: 1px solid #2296f3;
+}
+
+.uncheck {
+  border: 1px solid black;
+}
+
+.partial-check {
+  background-color: #5f6364;
+  color: white;
+
+  border: 1px solid #5f6364;
+}
