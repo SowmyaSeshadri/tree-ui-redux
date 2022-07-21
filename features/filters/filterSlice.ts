@@ -173,6 +173,14 @@ export const filterSlice = createSlice({
         if (d.data.id == action.payload) {
           d.data.isDeleted = true;
         }
+
+        d.data.values = d.data.values.map((subD) => {
+          if (subD.id == action.payload) {
+            subD.isDeleted = true;
+          }
+          return subD;
+        });
+
         return d;
       });
       return state;

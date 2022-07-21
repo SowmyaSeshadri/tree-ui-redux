@@ -57,6 +57,9 @@ export default function ColumnChild(props) {
     <Checkbox id={fieldInfo.id} checked={checkCurrent} label={fieldName} />
   );
 
+  if (fieldInfo.isDeleted) {
+    return '';
+  }
   return (
     <li key={fieldInfo.id} className="m-t-10 filter-list">
       {viewOrEditField}
