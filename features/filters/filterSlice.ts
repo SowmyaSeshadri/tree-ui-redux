@@ -135,6 +135,14 @@ export const filterSlice = createSlice({
         if (d.data.id == action.payload) {
           d.data.isInEditMode = true;
         }
+
+        d.data.values = d.data.values.map((subD) => {
+          if (subD.id == action.payload) {
+            subD.isInEditMode = true;
+          }
+          return subD;
+        });
+
         return d;
       });
     },

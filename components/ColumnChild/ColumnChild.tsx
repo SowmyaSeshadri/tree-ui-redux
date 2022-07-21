@@ -2,15 +2,23 @@ import React, { useEffect, useState } from 'react';
 import Checkbox from '../Checkbox/Checkbox';
 import { BsCheck2, BsFillPencilFill, BsXCircle } from 'react-icons/bs';
 import InputTextField from '../InputTextField/InputTextField';
+import {
+  deleteField,
+  editFieldName,
+  FieldData,
+  setEditMode,
+} from '../../features/filters/filterSlice';
+import { useAppDispatch } from '../../app/hooks';
 
 export default function ColumnChild(props) {
   // Init values
-  const fieldInfo = props.data;
+  const fieldInfo: FieldData = props.data;
   const checkAll = props.checkAll;
+  const editMode = fieldInfo.isInEditMode;
 
+  const dispatch = useAppDispatch();
   // States
   const [checkCurrent, setCheckCurrent] = useState(checkAll);
-  const [editMode, setEditMode] = useState(false);
   const [fieldName, setFieldName] = useState(fieldInfo.field);
 
   // Use effects
@@ -22,11 +30,11 @@ export default function ColumnChild(props) {
     <span className="flex">
       <BsXCircle
         className="action-icon"
-        onClick={() => props.onDelete(fieldInfo.id)}
+        onClick={() => dispatch(deleteField(fieldInfo.id))}
       />
       <BsFillPencilFill
+        onClick={() => dispatch(setEditMode(fieldInfo.id))}
         className="action-icon"
-        onClick={() => setEditMode(true)}
       />
     </span>
   ) : (
@@ -35,15 +43,18 @@ export default function ColumnChild(props) {
 
   const viewOrEditField = editMode ? (
     <div>
-      <InputTextField value={fieldName} />
-      <BsCheck2 />
+      <InputTextField
+        value={fieldName}
+        onChange={(value) => setFieldName(value)}
+      />
+      <BsCheck2
+        onClick={() =>
+          dispatch(editFieldName({ id: fieldInfo.id, field: fieldName }))
+        }
+      />
     </div>
   ) : (
-    <Checkbox
-      id={fieldInfo.id}
-      checked={checkCurrent}
-      label={fieldInfo.field}
-    />
+    <Checkbox id={fieldInfo.id} checked={checkCurrent} label={fieldName} />
   );
 
   return (
