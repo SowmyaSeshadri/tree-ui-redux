@@ -147,6 +147,7 @@ export const filterSlice = createSlice({
 
         return d;
       });
+      return state;
     },
     setEditMode: (state, action: PayloadAction<string>) => {
       state.fields = state.fields.map((d) => {
@@ -163,6 +164,7 @@ export const filterSlice = createSlice({
 
         return d;
       });
+      return state;
     },
     editFieldName: (
       state,

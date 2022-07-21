@@ -10,8 +10,9 @@ export default function App() {
   const dispatch = useAppDispatch();
   return (
     <div>
-      <span className="refresh">
-        <FaRedo onClick={() => dispatch(reloadFilters())} />
+      <span className="refresh" onClick={() => dispatch(reloadFilters())}>
+        <FaRedo size="12" />
+        <span> Reload </span>
       </span>
 
       {fieldInfo.fields.map((d: Field) => {
