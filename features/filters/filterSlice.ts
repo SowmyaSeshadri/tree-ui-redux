@@ -147,6 +147,15 @@ export const filterSlice = createSlice({
           d.data.field = action.payload.field;
           d.data.isInEditMode = false;
         }
+
+        d.data.values = d.data.values.map((subD) => {
+          if (subD.id == action.payload.id) {
+            subD.field = action.payload.field;
+            subD.isInEditMode = false;
+          }
+          return subD;
+        });
+
         return d;
       });
       return state;
