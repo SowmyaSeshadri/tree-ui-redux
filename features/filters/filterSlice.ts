@@ -132,15 +132,12 @@ export const filterSlice = createSlice({
   reducers: {
     reloadFilters: (state) => {
       state.fields = state.fields.map((d) => {
-        if (d.data.isDeleted) {
-          d.data.isDeleted = false;
-        }
+        let fieldData = d.data;
+        fieldData.isDeleted = fieldData.isDeleted ? false : fieldData.isDeleted;
 
-        if (d.data.values.length > 0) {
-          d.data.values = d.data.values.map((subD) => {
-            if (subD.isDeleted) {
-              subD.isDeleted = false;
-            }
+        if (fieldData.values.length > 0) {
+          fieldData.values = fieldData.values.map((subD) => {
+            subD.isDeleted = subD.isDeleted ? false : subD.isDeleted;
             return subD;
           });
         }
@@ -151,14 +148,13 @@ export const filterSlice = createSlice({
     },
     setEditMode: (state, action: PayloadAction<string>) => {
       state.fields = state.fields.map((d) => {
-        if (d.data.id == action.payload) {
-          d.data.isInEditMode = true;
-        }
+        let fieldData = d.data;
+        fieldData.isInEditMode =
+          fieldData.id == action.payload ? true : fieldData.isInEditMode;
 
-        d.data.values = d.data.values.map((subD) => {
-          if (subD.id == action.payload) {
-            subD.isInEditMode = true;
-          }
+        fieldData.values = fieldData.values.map((subD) => {
+          subD.isInEditMode =
+            subD.id == action.payload ? true : subD.isInEditMode;
           return subD;
         });
 
@@ -171,12 +167,13 @@ export const filterSlice = createSlice({
       action: PayloadAction<{ id: string; field: string }>
     ) => {
       state.fields = state.fields.map((d) => {
-        if (d.data.id == action.payload.id) {
-          d.data.field = action.payload.field;
-          d.data.isInEditMode = false;
+        let fieldData = d.data;
+        if (fieldData.id == action.payload.id) {
+          fieldData.field = action.payload.field;
+          fieldData.isInEditMode = false;
         }
 
-        d.data.values = d.data.values.map((subD) => {
+        fieldData.values = fieldData.values.map((subD) => {
           if (subD.id == action.payload.id) {
             subD.field = action.payload.field;
             subD.isInEditMode = false;
@@ -190,14 +187,12 @@ export const filterSlice = createSlice({
     },
     deleteField: (state, action: PayloadAction<string>) => {
       state.fields = state.fields.map((d) => {
-        if (d.data.id == action.payload) {
-          d.data.isDeleted = true;
-        }
+        let fieldData = d.data;
+        fieldData.isDeleted =
+          fieldData.id == action.payload ? true : fieldData.isDeleted;
 
-        d.data.values = d.data.values.map((subD) => {
-          if (subD.id == action.payload) {
-            subD.isDeleted = true;
-          }
+        fieldData.values = fieldData.values.map((subD) => {
+          subD.isDeleted = subD.id == action.payload ? true : subD.isDeleted;
           return subD;
         });
 

@@ -16,7 +16,6 @@ import './columnparent.css';
 
 export default function ColumnParent(props) {
   const fieldInfo: Field = props.fieldData;
-  console.log(fieldInfo);
   const expand = fieldInfo.isExpanded;
   const editMode = fieldInfo.data.isInEditMode;
   const hasChild = fieldInfo.data.values ? true : false;
