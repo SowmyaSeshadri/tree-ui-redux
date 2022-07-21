@@ -72,10 +72,8 @@ export default function ColumnParent(props) {
     ''
   );
 
-  console.log('Rendering - {}', fieldInfo.data.id);
-
   if (fieldInfo.data.isDeleted) {
-    return '';
+    return <React.Fragment></React.Fragment>;
   }
   return (
     <div className="parent-field">

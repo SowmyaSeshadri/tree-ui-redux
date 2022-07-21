@@ -58,7 +58,7 @@ export default function ColumnChild(props) {
   );
 
   if (fieldInfo.isDeleted) {
-    return '';
+    return <React.Fragment></React.Fragment>;
   }
   return (
     <li key={fieldInfo.id} className="m-t-10 filter-list">
