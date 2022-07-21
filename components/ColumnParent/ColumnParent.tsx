@@ -10,12 +10,14 @@ import {
   setEditMode,
 } from '../../features/filters/filterSlice';
 import Checkbox from '../Checkbox/Checkbox';
+import ColumnChild from '../ColumnChild/ColumnChild';
 import InputTextField from '../InputTextField/InputTextField';
 
 export default function ColumnParent(props) {
   const fieldInfo: Field = props.fieldData;
   const expand = fieldInfo.isExpanded;
   const editMode = fieldInfo.data.isInEditMode;
+  const hasChild = fieldInfo.data.values ? true : false;
 
   const dispatch = useAppDispatch();
 
@@ -87,19 +89,17 @@ export default function ColumnParent(props) {
               {actionIcons}
             </div>
 
-            {/* <ul className={` ${expand ? 'expand' : 'collapse'}`}>
+            <ul className={` ${expand ? 'expand' : 'collapse'}`}>
               {hasChild &&
-                fieldInfo.values.map((field) => (
+                fieldInfo.data.values.map((field) => (
                   <ColumnChild
                     key={field.id}
                     data={field}
-                    checkAll={checkAll}
-                    onChangeOfChild={handleOnChangeOfChild}
-                    onDelete={props.onDelete}
-                    onEdit={props.onEdit}
+                    // checkAll={checkAll}
+                    // onChangeOfChild={handleOnChangeOfChild}
                   />
                 ))}
-            </ul> */}
+            </ul>
           </div>
         </li>
       </ul>
