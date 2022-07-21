@@ -130,6 +130,24 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
+    reloadFilters: (state) => {
+      state.fields = state.fields.map((d) => {
+        if (d.data.isDeleted) {
+          d.data.isDeleted = false;
+        }
+
+        if (d.data.values.length > 0) {
+          d.data.values = d.data.values.map((subD) => {
+            if (subD.isDeleted) {
+              subD.isDeleted = false;
+            }
+            return subD;
+          });
+        }
+
+        return d;
+      });
+    },
     setEditMode: (state, action: PayloadAction<string>) => {
       state.fields = state.fields.map((d) => {
         if (d.data.id == action.payload) {
@@ -199,5 +217,6 @@ export const {
   deleteField,
   expandOrCollapseField,
   setEditMode,
+  reloadFilters,
 } = filterSlice.actions;
 export default filterSlice.reducer;
