@@ -57,7 +57,7 @@ export default function ColumnChild(props) {
     <Checkbox id={fieldInfo.id} checked={checkCurrent} label={fieldName} />
   );
 
-  if (fieldInfo.isDeleted) {
+  if (fieldInfo.isDeleted || !fieldInfo.isVisible) {
     return <React.Fragment></React.Fragment>;
   }
   return (

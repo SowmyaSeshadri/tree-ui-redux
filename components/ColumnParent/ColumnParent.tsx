@@ -73,7 +73,7 @@ export default function ColumnParent(props) {
     ''
   );
 
-  if (fieldInfo.data.isDeleted) {
+  if (fieldInfo.data.isDeleted || !fieldInfo.data.isVisible) {
     return <React.Fragment></React.Fragment>;
   }
   return (

@@ -8,6 +8,7 @@ export interface FieldData {
   isPartiallyChecked: Boolean;
   isInEditMode: Boolean;
   isDeleted: Boolean;
+  isVisible: Boolean;
 }
 
 export interface Field {
@@ -34,6 +35,7 @@ const initialState: Filter = {
             isPartiallyChecked: false,
             isInEditMode: false,
             isDeleted: false,
+            isVisible: true,
           },
           {
             id: '123_2',
@@ -43,6 +45,7 @@ const initialState: Filter = {
             isPartiallyChecked: false,
             isInEditMode: false,
             isDeleted: false,
+            isVisible: true,
           },
           {
             id: '123_3',
@@ -52,12 +55,14 @@ const initialState: Filter = {
             isPartiallyChecked: false,
             isInEditMode: false,
             isDeleted: false,
+            isVisible: true,
           },
         ],
         isChecked: false,
         isPartiallyChecked: false,
         isInEditMode: false,
         isDeleted: false,
+        isVisible: true,
       },
       isExpanded: false,
     },
@@ -74,6 +79,7 @@ const initialState: Filter = {
             isPartiallyChecked: false,
             isInEditMode: false,
             isDeleted: false,
+            isVisible: true,
           },
           {
             id: '234_2',
@@ -83,12 +89,14 @@ const initialState: Filter = {
             isPartiallyChecked: false,
             isInEditMode: false,
             isDeleted: false,
+            isVisible: true,
           },
         ],
         isChecked: false,
         isPartiallyChecked: false,
         isInEditMode: false,
         isDeleted: false,
+        isVisible: true,
       },
       isExpanded: false,
     },
@@ -104,6 +112,7 @@ const initialState: Filter = {
             isChecked: false,
             isPartiallyChecked: false,
             isInEditMode: false,
+            isVisible: true,
             isDeleted: false,
           },
           {
@@ -114,22 +123,58 @@ const initialState: Filter = {
             isPartiallyChecked: false,
             isInEditMode: false,
             isDeleted: false,
+            isVisible: true,
           },
         ],
         isChecked: false,
         isPartiallyChecked: false,
         isInEditMode: false,
         isDeleted: false,
+        isVisible: true,
       },
       isExpanded: false,
     },
   ],
 };
 
+const checkMatch = (value, searchTerm) => {
+  return value.toLowerCase().includes(searchTerm?.toLowerCase());
+};
+
 export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
+    searchFilter: (state: Filter, action: PayloadAction<string>) => {
+      if (action.payload.length == 0) {
+        console.log('Empty search term');
+        state.fields = state.fields.map((field) => {
+          field.data.isVisible = true;
+          field.data.values = field.data.values.map((d) => {
+            d.isVisible = true;
+            return d;
+          });
+          return field;
+        });
+
+        return state;
+      }
+
+      state.fields = state.fields.map((field: Field) => {
+        if (!checkMatch(field.data.field, action.payload)) {
+          field.data.isVisible = false;
+        }
+
+        field.data.values = field.data.values.map((d: FieldData) => {
+          if (!checkMatch(d.field, action.payload)) {
+            d.isVisible = false;
+          }
+          return d;
+        });
+        return field;
+      });
+      return state;
+    },
     reloadFilters: (state) => {
       state.fields = state.fields.map((d) => {
         let fieldData = d.data;
@@ -215,5 +260,6 @@ export const {
   expandOrCollapseField,
   setEditMode,
   reloadFilters,
+  searchFilter,
 } = filterSlice.actions;
 export default filterSlice.reducer;
