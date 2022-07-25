@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Checkbox from '../Checkbox/Checkbox';
 import { BsCheck2, BsFillPencilFill, BsXCircle } from 'react-icons/bs';
 import InputTextField from '../InputTextField/InputTextField';
@@ -15,13 +15,11 @@ import { useAppDispatch } from '../../app/hooks';
 export default function ColumnChild(props) {
   // Init values
   const fieldInfo: FieldData = props.data;
-  const checkAll = fieldInfo.isChecked;
-  const editMode = fieldInfo.isInEditMode;
-
   const dispatch = useAppDispatch();
   const [fieldName, setFieldName] = useState(fieldInfo.field);
 
-  const actionIcons = !editMode ? (
+  // Components
+  const actionIcons = !fieldInfo.isInEditMode ? (
     <span className="flex">
       <BsXCircle
         className="action-icon"
@@ -36,11 +34,7 @@ export default function ColumnChild(props) {
     ''
   );
 
-  const handleOnChangeOfChild = (id, checked) => {
-    dispatch(checkChild({ id, checked }));
-  };
-
-  const viewOrEditField = editMode ? (
+  const viewOrEditField = fieldInfo.isInEditMode ? (
     <div>
       <InputTextField
         value={fieldName}
@@ -55,9 +49,11 @@ export default function ColumnChild(props) {
   ) : (
     <Checkbox
       id={fieldInfo.id}
-      checked={checkAll}
+      checked={fieldInfo.isChecked}
       label={fieldName}
-      onChange={handleOnChangeOfChild}
+      onChange={(id, checked) => {
+        dispatch(checkChild({ id, checked }));
+      }}
     />
   );
 

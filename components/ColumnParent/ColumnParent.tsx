@@ -16,30 +16,27 @@ import InputTextField from '../InputTextField/InputTextField';
 import './columnparent.css';
 
 export default function ColumnParent(props) {
+  // Constants
   const fieldInfo: Field = props.fieldData;
   const expand = fieldInfo.isExpanded;
   const editMode = fieldInfo.data.isInEditMode;
   const hasChild = fieldInfo.data.values ? true : false;
-
   const dispatch = useAppDispatch();
-
   const [fieldName, setFieldName] = useState(fieldInfo.data.field);
 
+  // Handlers
   const handleExpandOrCollapse = () => {
     let fieldToUpdate = JSON.parse(JSON.stringify(fieldInfo));
     fieldToUpdate.isExpanded = !expand;
     dispatch(expandOrCollapseField(fieldToUpdate));
   };
 
+  // Components
   const expandCollapseIcon = expand ? (
     <FaAngleDown onClick={handleExpandOrCollapse} />
   ) : (
     <FaAngleRight onClick={handleExpandOrCollapse} />
   );
-
-  const handleOnChangeOfCheckParent = (id, checked) => {
-    dispatch(checkParent({ id, checked }));
-  };
 
   const viewOrEditField = editMode ? (
     <div>
@@ -56,7 +53,7 @@ export default function ColumnParent(props) {
   ) : (
     <Checkbox
       id={fieldInfo.data.id}
-      onChange={handleOnChangeOfCheckParent}
+      onChange={(id, checked) => dispatch(checkParent({ id, checked }))}
       checked={fieldInfo.data.isChecked}
       label={fieldName}
       partialCheck={fieldInfo.data.isPartiallyChecked}
