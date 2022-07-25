@@ -22,7 +22,7 @@ export default function Checkbox(props) {
 
   // Handlers
   const handleOnCheck = (e) => {
-    // props.onChange(e.currentTarget.id, !checked);
+    props.onChange(e.currentTarget.id, !checked);
   };
 
   const iconToDisplay = partialCheck ? (

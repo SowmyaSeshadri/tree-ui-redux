@@ -7,24 +7,19 @@ import {
   editFieldName,
   FieldData,
   setEditMode,
+  checkParent,
+  checkChild,
 } from '../../features/filters/filterSlice';
 import { useAppDispatch } from '../../app/hooks';
 
 export default function ColumnChild(props) {
   // Init values
   const fieldInfo: FieldData = props.data;
-  const checkAll = props.checkAll;
+  const checkAll = fieldInfo.isChecked;
   const editMode = fieldInfo.isInEditMode;
 
   const dispatch = useAppDispatch();
-  // States
-  const [checkCurrent, setCheckCurrent] = useState(checkAll);
   const [fieldName, setFieldName] = useState(fieldInfo.field);
-
-  // Use effects
-  useEffect(() => {
-    setCheckCurrent(checkAll);
-  }, [checkAll]);
 
   const actionIcons = !editMode ? (
     <span className="flex">
@@ -41,6 +36,10 @@ export default function ColumnChild(props) {
     ''
   );
 
+  const handleOnChangeOfChild = (id, checked) => {
+    dispatch(checkChild({ id, checked }));
+  };
+
   const viewOrEditField = editMode ? (
     <div>
       <InputTextField
@@ -54,7 +53,12 @@ export default function ColumnChild(props) {
       />
     </div>
   ) : (
-    <Checkbox id={fieldInfo.id} checked={checkCurrent} label={fieldName} />
+    <Checkbox
+      id={fieldInfo.id}
+      checked={checkAll}
+      label={fieldName}
+      onChange={handleOnChangeOfChild}
+    />
   );
 
   if (fieldInfo.isDeleted || !fieldInfo.isVisible) {

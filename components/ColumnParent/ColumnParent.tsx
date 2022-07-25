@@ -7,6 +7,7 @@ import {
   editFieldName,
   expandOrCollapseField,
   Field,
+  checkParent,
   setEditMode,
 } from '../../features/filters/filterSlice';
 import Checkbox from '../Checkbox/Checkbox';
@@ -36,6 +37,10 @@ export default function ColumnParent(props) {
     <FaAngleRight onClick={handleExpandOrCollapse} />
   );
 
+  const handleOnChangeOfCheckParent = (id, checked) => {
+    dispatch(checkParent({ id, checked }));
+  };
+
   const viewOrEditField = editMode ? (
     <div>
       <InputTextField
@@ -51,7 +56,7 @@ export default function ColumnParent(props) {
   ) : (
     <Checkbox
       id={fieldInfo.data.id}
-      // onChange={handleOnChangeOfCheckParent}
+      onChange={handleOnChangeOfCheckParent}
       checked={fieldInfo.data.isChecked}
       label={fieldName}
       partialCheck={fieldInfo.data.isPartiallyChecked}
@@ -91,12 +96,7 @@ export default function ColumnParent(props) {
             <ul className={` ${expand ? 'expand' : 'collapse'}`}>
               {hasChild &&
                 fieldInfo.data.values.map((field) => (
-                  <ColumnChild
-                    key={field.id}
-                    data={field}
-                    // checkAll={checkAll}
-                    // onChangeOfChild={handleOnChangeOfChild}
-                  />
+                  <ColumnChild key={field.id} data={field} />
                 ))}
             </ul>
           </div>

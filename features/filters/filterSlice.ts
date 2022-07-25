@@ -145,6 +145,68 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
+    checkChild: (
+      state: Filter,
+      action: PayloadAction<{ id: string; checked: boolean }>
+    ) => {
+      state.fields = state.fields.map((field: Field) => {
+        field.data.values.map((d) => {
+          if (d.id === action.payload.id) {
+            d.isChecked = action.payload.checked;
+
+            // Updating the state of parent.
+
+            // field.data.isPartiallyChecked = action.payload.checked;
+            let totallySelectedChildren = field.data.values.filter(
+              (s) => s.isChecked
+            );
+
+            // When all the children are selected.
+            if (totallySelectedChildren.length === field.data.values.length) {
+              field.data.isChecked = true;
+              field.data.isPartiallyChecked = false;
+            }
+            // None of the children are selected.
+            else if (totallySelectedChildren.length === 0) {
+              field.data.isChecked = false;
+              field.data.isPartiallyChecked = false;
+            }
+            // if one / more of the children is selected but not all.
+            else {
+              field.data.isChecked = false;
+              field.data.isPartiallyChecked = true;
+            }
+          }
+        });
+
+        return field;
+      });
+      return state;
+    },
+    checkParent: (
+      state: Filter,
+      action: PayloadAction<{ id: string; checked: boolean }>
+    ) => {
+      state.fields = state.fields.map((field: Field) => {
+        field.data.isPartiallyChecked = false;
+        let isCurrentlyUpdatedField = field.data.id == action.payload.id;
+
+        field.data.isChecked = isCurrentlyUpdatedField
+          ? action.payload.checked
+          : field.data.isChecked;
+
+        if (isCurrentlyUpdatedField && field.data.values.length > 0) {
+          field.data.values = field.data.values.map((d) => {
+            d.isChecked = action.payload.checked;
+            return d;
+          });
+        }
+
+        return field;
+      });
+
+      return state;
+    },
     searchFilter: (state: Filter, action: PayloadAction<string>) => {
       if (action.payload.length == 0) {
         console.log('Empty search term');
@@ -258,8 +320,10 @@ export const {
   editFieldName,
   deleteField,
   expandOrCollapseField,
+  checkChild,
   setEditMode,
   reloadFilters,
   searchFilter,
+  checkParent,
 } = filterSlice.actions;
 export default filterSlice.reducer;
